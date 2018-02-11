@@ -12,7 +12,7 @@
 
 struct vector {
 	int *data;
-	int used;
+	int size;
 	int capacity;
 };
 
@@ -27,7 +27,7 @@ struct vector *init()
 	memset(vtmp, 0, sizeof(struct vector));
 
 	vtmp->data = calloc(VCAP, sizeof(int));
-	vtmp->used = 0;
+	vtmp->size = 0;
 	vtmp->capacity = VCAP;
 
 	return vtmp;
@@ -35,7 +35,7 @@ struct vector *init()
 
 int size(struct vector *da)
 {
-	return da->used;
+	return da->size;
 }
 
 int capacity(struct vector *da)
@@ -45,7 +45,7 @@ int capacity(struct vector *da)
 
 int is_empty(struct vector *da)
 {
-	if (!da->used)
+	if (!da->size)
 		return 1;
 	else
 		return 0;
@@ -64,7 +64,7 @@ int push(struct vector *da, int item)
 #if 0
 	int *redata;
 
-	if (da->used == da->capacity) {
+	if (da->size == da->capacity) {
 		redata = realloc(da->data, da->capacity * FAC * sizeof(int));
 		if (!redata)
 			exit(1);
@@ -79,8 +79,8 @@ int push(struct vector *da, int item)
 #endif
 	resize(da);
 
-	*(da->data + da->used) = item;
-	da->used++;
+	*(da->data + da->size) = item;
+	da->size++;
 
 	return 0;
 }
@@ -90,7 +90,7 @@ int insert(struct vector *da, int index, int item)
 #if 0
 	int *redata;
 
-	if (da->used == da->capacity) {
+	if (da->size == da->capacity) {
 		redata = realloc(da->data, da->capacity * FAC * sizeof(int));
 		if (!redata)
 			exit(1);
@@ -105,11 +105,11 @@ int insert(struct vector *da, int index, int item)
 #endif
 	resize(da);
 
-	for (int i = da->used; i >= index; i--)
+	for (int i = da->size; i >= index; i--)
 		*(da->data + i + 1) = *(da->data + i);
 
 	*(da->data + index) = item;
-	da->used++;
+	da->size++;
 
 	return 0;
 }
@@ -122,10 +122,10 @@ int prepend(struct vector *da, int item)
 int pop(struct vector *da)
 {
 #if 0
-	int tmp = *(da->data + da->used - 1);
+	int tmp = *(da->data + da->size - 1);
 	int *redata;
 
-	if (da->used == da->capacity / 2 + 1) {
+	if (da->size == da->capacity / 2 + 1) {
 		int recap = da->capacity / 2 * sizeof(int);
 
 		redata = realloc(da->data, recap);
@@ -139,14 +139,14 @@ int pop(struct vector *da)
 
 		da->capacity /= 2;
 	} else {
-		*(da->data + da->used - 1) = 0;
+		*(da->data + da->size - 1) = 0;
 	}
 #endif
-	da->used--;
+	da->size--;
 
 	resize(da);
 
-	return *(da->data + da->used - 1);
+	return *(da->data + da->size - 1);
 }
 
 /* return what deleted */
@@ -155,7 +155,7 @@ int delete(struct vector *da, int index)
 #if 0
 	int *redata;
 
-	if (da->used == da->capacity / 2 + 1) {
+	if (da->size == da->capacity / 2 + 1) {
 		int recap = da->capacity / FAC * sizeof(int);
 
 		redata = realloc(da->data, recap);
@@ -171,10 +171,10 @@ int delete(struct vector *da, int index)
 	}
 #endif
 	int tmp = *(da->data + index);
-	for (int i = index; i < da->used; i++)
+	for (int i = index; i < da->size; i++)
 		*(da->data + i) = *(da->data + i + 1);
 
-	da->used--;
+	da->size--;
 
 	resize(da);
 
@@ -185,7 +185,7 @@ int find_item(struct vector *da, int item)
 {
 	int i;
 
-	for (i = 0; i < da->used; i++) {
+	for (i = 0; i < da->size; i++) {
 		if (*(da->data + i) == item)
 			return i;
 	}
@@ -199,7 +199,7 @@ int remove_item(struct vector *da, int item)
 	int n;
 
 refor:
-	for (i = 0; i < da->used; i++) {
+	for (i = 0; i < da->size; i++) {
 		if (*(da->data + i) == item) {
 			delete(da, i);
 			n++;
@@ -221,10 +221,10 @@ int resize(struct vector *da)
 	 * resize to half
 	 */
 
-	if (da->used == da->capacity) {
+	if (da->size == da->capacity) {
 		recap = da->capacity * FAC * sizeof(int);
 		da->capacity *= FAC;
-	} else if (da->capacity > VCAP && da->used == da->capacity / 4) {
+	} else if (da->capacity > VCAP && da->size == da->capacity / 4) {
 		recap = da->capacity / FAC * sizeof(int);
 		da->capacity /= FAC;
 	} else
@@ -254,7 +254,7 @@ void show_all(struct vector *da)
 
 void show_top_ten(struct vector *da)
 {
-	if (da->used < 10)
+	if (da->size < 10)
 		show_all(da);
 	else
 		for (int i = 0; i < 10; i++)
@@ -263,10 +263,10 @@ void show_top_ten(struct vector *da)
 
 void show_last_ten(struct vector *da)
 {
-	if (da->used < 10)
+	if (da->size < 10)
 		show_all(da);
 	else
-		for (int i = da->used - 10; i < da->used; i++)
+		for (int i = da->size - 10; i < da->size; i++)
 			printf("at%03d = %03d\n", i, at(da, i));
 }
 
