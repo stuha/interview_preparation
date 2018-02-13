@@ -21,7 +21,7 @@ This [article](https://www.cs.bu.edu/teaching/c/queue/array/types.html) is splen
     - empty()
     - full()
 
-- [ ] Implement using linked-list, with tail pointer:
+- [x] Implement using linked-list, with tail pointer:
     - enqueue(value) - adds value at position at tail
     - dequeue() - returns value and removes least recently added element (front)
     - empty()
