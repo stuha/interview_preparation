@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 
 typedef int qm_type;
@@ -25,7 +26,6 @@ enum {
 	ERROR_QUEUE
 };
 
-typedef enum {true, false} bool;
 
 struct queue *init()
 {

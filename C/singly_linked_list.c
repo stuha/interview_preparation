@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 struct node {
 	int data;
@@ -16,10 +17,6 @@ struct list {
 	int size;
 };
 
-typedef enum {
-	true,
-	false
-} bool;
 
 struct list *init()
 {
@@ -150,16 +147,16 @@ int back(struct list *l)
 	value_at(l, l->size - 1);
 }
 
-bool insert(struct list *l, int index, int value)
+void insert(struct list *l, int index, int value)
 {
 	if (index < 0) {
 		printf("Are you kidding me?!\n");
-		return false;
+		exit(1);
 	}
 
 	if (index > l->size - 1) {
 		printf("Your index is out of range!\n");
-		return false;
+		exit(1);
 	}
 
 	if (index == 0)
@@ -167,7 +164,7 @@ bool insert(struct list *l, int index, int value)
 	else {
 		struct node *nnew = malloc(sizeof(struct node));
 		if (!nnew)
-			return false;
+			exit(1);
 		memset(nnew, 0, sizeof(struct node));
 		nnew->data = value;
 		/* ntmp is at index 0 */
@@ -180,19 +177,17 @@ bool insert(struct list *l, int index, int value)
 
 		l->size++;
 	}
-
-	return true;
 }
 
-bool erase(struct list *l, int index)
+void erase(struct list *l, int index)
 {
 	if (index < 0) {
 		printf("You are kidding me!\n");
-		return false;
+		exit(1);
 	}
 	if (index > l->size - 1) {
 		printf("Your index is out of range!\n");
-		return false;
+		exit(1);
 	}
 	if (index == 0) {
 		free(l->head);
@@ -209,7 +204,6 @@ bool erase(struct list *l, int index)
 
 		l->size--;
 	}
-	return true;
 }
 
 int value_n_from_end(struct list *l, int npos)
@@ -278,15 +272,12 @@ int remvoe_value(struct list *l, int value)
 	return 0;
 }
 
-bool destroy(struct list *l)
+void destroy(struct list *l)
 {
 	for (int i = 1; i <= l->size; i++)
-		if (erase(l, l->size - i) == false)
-			return false;
+		erase(l, l->size - i);
 
 	free(l);
-
-	return true;
 }
 
 

@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 #define MAX_QUEUE_SIZE 16
 
@@ -15,8 +16,6 @@ struct queue {
 	int front;
 	int count;
 };
-
-typedef enum {true, false} bool;
 
 enum {
 	ERROR_ALLOC = 1,
@@ -44,7 +43,7 @@ struct queue *init()
 }
 
 
-bool enqueue(struct queue *q, int value)
+void enqueue(struct queue *q, int value)
 {
 	if (q->count >= MAX_QUEUE_SIZE)
 		exit(ERROR_QUEUE_MAX);
@@ -52,8 +51,6 @@ bool enqueue(struct queue *q, int value)
 	int index = (q->front + q->count) % MAX_QUEUE_SIZE;
 	q->data[index] = value;
 	q->count++;
-
-	return true;
 }
 
 queue_type dequeue(struct queue *q)

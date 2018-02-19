@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 #define VCAP 16
 #define FAC  2
@@ -43,12 +44,12 @@ int capacity(struct vector *da)
 	return da->capacity;
 }
 
-int is_empty(struct vector *da)
+bool is_empty(struct vector *da)
 {
 	if (!da->size)
-		return 1;
+		return true;
 	else
-		return 0;
+		return false;
 }
 
 int at(struct vector *da, int index)

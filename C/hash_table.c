@@ -41,9 +41,8 @@ dict *init(const int size)
 	if (!dict_tmp->data)
 		exit(ERROR_ALLOC);
 
-	for (int i = 0; i < size; i++) {
+	for (int i = 0; i < size; i++)
 		dict_tmp->data[i] = NULL;
-	}
 
 	dict_tmp->size = size;
 
@@ -85,28 +84,23 @@ bool add(dictp d, const char *key, const key_value *obj)
 		if (strcmp(d->data[index]->key, key) == 0) {
 			found = true;
 			break;
-
-		} else if (strcmp(d->data[index]->key, k_dummy) == 0) {
+		} else if (strcmp(d->data[index]->key, k_dummy) == 0)
 			dummy_index = index;
-		}
 
 		index = (index + 1) % d->size;
 		if (index == original_index)
 			return false;
 	}
 
-	if (! found && dummy_index != -1) {
+	if (!found && dummy_index != -1)
 		// use dummy index to insert
 		index = dummy_index;
-	}
 
-	if (d->data[index] == NULL) {
+	if (d->data[index] == NULL)
 		d->data[index] = malloc(sizeof(key_value));
-
-	} else {
+	else {
 		free(d->data[index]->key);
 		free(d->data[index]->value);
-
 	}
 
 	d->data[index]->key = strdup(obj->key);
