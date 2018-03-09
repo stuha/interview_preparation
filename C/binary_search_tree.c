@@ -53,13 +53,33 @@ struct bst_node *insert(value_type value, struct bst_node *root)
 	return root;
 }
 
+int get_node_count(struct bst_node *root)
+{
+	if (root == NULL)
+		return 0;
+
+	return 1 + get_node_count(root->left) + get_node_count(root->right);
+}
+
+void delete_tree(struct bst_node *root)
+{
+	if (root == NULL) return;
+
+	delete_tree(root->left);
+	delete_tree(root->right);
+	free(root);
+}
+
+void print_values(struct bst_node *root)
+{
+	if (root == NULL)
+		return;
+
+	print_values(root->left);
+	printf("%d\n", root->value);
+	print_values(root->right);
+}
 /*
-get_node_count
-
-print_values
-
-delete_tree
-
 get_height
 
 get_min
@@ -81,9 +101,16 @@ get_successor
 
 /* test cases */
 
-
 int main(void)
 {
+	struct bst_node *bst_test;
+	bst_test = insert(10, bst_test);
+	bst_test = insert(20, bst_test);
 
+	printf("count: %d\n", get_node_count(bst_test));
+	printf("-------------------------\n");
+	print_values(bst_test);
+
+	delete_tree(bst_test);
 	return 0;
 }
