@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 typedef int value_type;
 
@@ -127,6 +128,19 @@ bool is_binary_search_tree(struct bst_node *root, int min_value, int max_value)
 		is_binary_search_tree(root->right, root->value + 1, max_value);
 }
 
+bool is_in_tree(struct bst_node *root, int value)
+{
+	if (root == NULL)
+		return false;
+
+	if (root->value > value)
+		is_in_tree(root->left, value);
+	else if (root->value < value)
+		is_in_tree(root->right, value);
+	else
+		return true;
+}
+
 /* more complicated than other function */
 struct bst_node *delete_value(struct bst_node *root, int value)
 {
@@ -204,8 +218,15 @@ int main(void)
 	struct bst_node *bst_test;
 	bst_test = insert(10, bst_test);
 	bst_test = insert(20, bst_test);
+	bst_test = insert(3, bst_test);
+	bst_test = insert(40, bst_test);
+	bst_test = insert(5, bst_test);
+	bst_test = insert(13, bst_test);
 
-	printf("count: %d\n", get_node_count(bst_test));
+	assert(!is_in_tree(bst_test, 0));
+	assert(is_in_tree(bst_test, 10));
+
+	printf("Tree contains %d nodes.\n", get_node_count(bst_test));
 	printf("-------------------------\n");
 	print_values(bst_test);
 
